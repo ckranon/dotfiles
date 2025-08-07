@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, ... }:
 
 {
   imports = [
@@ -13,7 +13,9 @@
 
   services.xserver.enable = true;
   services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.i3.enable = true;
+  
+  # This is the corrected line for enabling i3 as the window manager
+  services.xserver.windowManager.i3.enable = true;
 
   networking.networkmanager.enable = true;
 
