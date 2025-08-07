@@ -1,70 +1,31 @@
-
-# This file is your Home Manager configuration, defining user-specific packages and dotfiles.
-{ config, pkgs, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 {
-  # Set the Home Manager state version
-  home.stateVersion = "24.05"; # Must match your NixOS version
-
-  # Install all user-level applications and utilities here.
-  home.packages = with pkgs; [
-    firefox
-    alacritty
-    neovim
-    tmux
-    feh
-    git
-    nano
-    xclip
-    xdg-utils
+  imports = [
+    ./hardware-configuration.nix
   ];
 
-  # Configure the i3 window manager.
-  programs.i3 = {
-    enable = true;
-    package = pkgs.i3-gaps;
+  networking.hostName = "nixos-minimal-rice";
+  time.timeZone = "America/Chicago";
+  i18n.defaultLocale = "en_US.UTF-8";
 
-    config = {
-      modifier = "Mod4";
-      terminal = "${pkgs.alacritty}/bin/alacritty -e tmux new-session -A -s main";
-      
-      binds = {
-        "${config.programs.i3.config.modifier}+t" = "exec ${config.programs.i3.config.terminal}";
-        "${config.programs.i3.config.modifier}+f" = "exec ${pkgs.firefox}/bin/firefox";
-        "${config.programs.i3.config.modifier}+d" = "exec dmenu_run";
-        "${config.programs.i3.config.modifier}+Shift+e" = "exec i3-msg exit";
-      };
+  nixpkgs.config.allowUnfree = true;
 
-      startup = [
-        { command = "exec --no-startup-id feh --bg-scale /home/yourusername/wallpapers/grey_background.png"; }
-      ];
+  services.xserver.enable = true;
+  services.xserver.displayManager.lightdm.enable = true;
+  services.xserver.desktopManager.i3.enable = true;
 
-      floating_modifier = "Mod1";
-    };
+  networking.networkmanager.enable = true;
+
+  sound.enable = true;
+  hardware.pulseaudio.enable = true;
+
+  fonts.fontconfig.enable = true;
+
+  users.users.yourusername = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" "networkmanager" ];
   };
 
-  # Configure the Alacritty terminal emulator
-  programs.alacritty = {
-    enable = true;
-    settings = {
-      font = {
-        size = 12.0;
-        normal.family = "monospace";
-      };
-      colors.primary = {
-        background = "#282a36";
-        foreground = "#f8f8f2";
-      };
-    };
-  };
-
-  # Configure Neovim with clipboard support
-  programs.neovim = {
-    enable = true;
-    package = pkgs.neovim;
-    extraConfig = ''
-      " Enable clipboard access with the system's clipboard
-      set clipboard=unnamedplus
-    '';
-  };
+  system.stateVersion = "24.05";
 }
