@@ -1,0 +1,9 @@
+# Nix files to ignore
+result/
+.direnv/
+.DS_Store
+*.swp
+*.bak
+
+# Nix flake specific
+flake.lock
