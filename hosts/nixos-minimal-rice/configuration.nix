@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports = [
@@ -13,8 +13,6 @@
 
   services.xserver.enable = true;
   services.xserver.displayManager.lightdm.enable = true;
-  
-  # This is the corrected line for enabling i3 as the window manager
   services.xserver.windowManager.i3.enable = true;
 
   networking.networkmanager.enable = true;
@@ -24,10 +22,10 @@
 
   fonts.fontconfig.enable = true;
 
-  users.users.yourusername = {
+  users.users.cranon = {
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" ];
   };
 
-  system.stateVersion = "24.05";
+  system.stateVersion = "25.05";
 }

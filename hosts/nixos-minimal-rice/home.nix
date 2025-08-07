@@ -1,11 +1,8 @@
-# This file is your Home Manager configuration, defining user-specific packages and dotfiles.
 { config, pkgs, ... }:
 
 {
-  # Set the Home Manager state version
-  home.stateVersion = "24.05";
+  home.stateVersion = "25.05";
 
-  # Install all user-level applications and utilities here.
   home.packages = with pkgs; [
     firefox
     alacritty
@@ -18,13 +15,13 @@
     xdg-utils
   ];
 
-  # Configure the i3 window manager.
   programs.i3 = {
     enable = true;
     package = pkgs.i3-gaps;
 
     config = {
       modifier = "Mod4";
+      terminal = "${pkgs.alacritty}/bin/alacritty -e tmux new-session -A -s main";
       
       binds = {
         "Mod4+t" = "exec ${pkgs.alacritty}/bin/alacritty -e tmux new-session -A -s main";
@@ -34,14 +31,13 @@
       };
 
       startup = [
-        { command = "exec --no-startup-id feh --bg-scale /home/yourusername/wallpapers/grey_background.png"; }
+        { command = "exec --no-startup-id feh --bg-scale /home/cranon/wallpapers/grey_background.png"; }
       ];
 
       floating_modifier = "Mod1";
     };
   };
 
-  # Configure the Alacritty terminal emulator
   programs.alacritty = {
     enable = true;
     settings = {
@@ -56,7 +52,6 @@
     };
   };
 
-  # Configure Neovim with clipboard support
   programs.neovim = {
     enable = true;
     package = pkgs.neovim;
