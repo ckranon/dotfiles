@@ -1,64 +1,24 @@
-
-{ config, pkgs, ... }:
-
 {
-  home.stateVersion = "25.05";
+  description = "Minimalist NixOS and Home Manager rice";
 
-  home.packages = with pkgs; [
-    firefox
-    alacritty
-    neovim
-    tmux
-    feh
-    git
-    nano
-    xclip
-    xdg-utils
-  ];
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+  };
 
-  programs.i3 = {
-    enable = true;
-    package = pkgs.i3-gaps;
+  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
+    nixosConfigurations."nixos-minimal-rice" = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      specialArgs = { inherit inputs; };
+      modules = [
+        ./hosts/nixos-minimal-rice/configuration.nix
 
-    config = {
-      modifier = "Mod4";
-      terminal = "${pkgs.alacritty}/bin/alacritty -e tmux new-session -A -s main";
-      
-      binds = {
-        "${config.programs.i3.config.modifier}+t" = "exec ${config.programs.i3.config.terminal}";
-        "${config.programs.i3.config.modifier}+f" = "exec ${pkgs.firefox}/bin/firefox";
-        "${config.programs.i3.config.modifier}+d" = "exec dmenu_run";
-        "${config.programs.i3.config.modifier}+Shift+e" = "exec i3-msg exit";
-      };
-
-      startup = [
-        { command = "exec --no-startup-id feh --bg-scale /home/yourusername/wallpapers/grey_background.png"; }
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.users.yourusername = import ./hosts/nixos-minimal-rice/home.nix;
+        }
       ];
-
-      floating_modifier = "Mod1";
     };
-  };
-
-  programs.alacritty = {
-    enable = true;
-    settings = {
-      font = {
-        size = 12.0;
-        normal.family = "monospace";
-      };
-      colors.primary = {
-        background = "#282a36";
-        foreground = "#f8f8f2";
-      };
-    };
-  };
-
-  programs.neovim = {
-    enable = true;
-    package = pkgs.neovim;
-    extraConfig = ''
-      " Enable clipboard access with the system's clipboard
-      set clipboard=unnamedplus
-    '';
   };
 }
