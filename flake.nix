@@ -1,3 +1,4 @@
+
 {
 description = "Minimalist NixOS and Home Manager rice";
 
