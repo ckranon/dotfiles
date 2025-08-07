@@ -1,4 +1,3 @@
-
 # This file is your Home Manager configuration, defining user-specific packages and dotfiles.
 { config, pkgs, ... }:
 
@@ -28,8 +27,6 @@
       modifier = "Mod4";
       terminal = "${pkgs.alacritty}/bin/alacritty -e tmux new-session -A -s main";
       
-      # The 'binds' attribute is now correctly defined as a nested attribute set.
-      # This was the source of the previous error.
       binds = {
         "${config.programs.i3.config.modifier}+t" = "exec ${config.programs.i3.config.terminal}";
         "${config.programs.i3.config.modifier}+f" = "exec ${pkgs.firefox}/bin/firefox";
