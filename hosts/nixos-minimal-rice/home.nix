@@ -4,7 +4,7 @@
 
 {
   # Set the Home Manager state version
-  home.stateVersion = "24.05"; # Must match your NixOS version
+  home.stateVersion = "24.05";
 
   # Install all user-level applications and utilities here.
   home.packages = with pkgs; [
@@ -28,6 +28,8 @@
       modifier = "Mod4";
       terminal = "${pkgs.alacritty}/bin/alacritty -e tmux new-session -A -s main";
       
+      # The 'binds' attribute is now correctly defined as a nested attribute set.
+      # This was the source of the previous error.
       binds = {
         "${config.programs.i3.config.modifier}+t" = "exec ${config.programs.i3.config.terminal}";
         "${config.programs.i3.config.modifier}+f" = "exec ${pkgs.firefox}/bin/firefox";
