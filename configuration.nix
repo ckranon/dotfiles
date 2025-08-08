@@ -1,31 +1,27 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, ... }:
 
 {
+  # Import the hardware configuration created by the NixOS installer.
   imports = [
     ./hardware-configuration.nix
   ];
 
-  networking.hostName = "nixos-minimal-rice";
+  # Use the systemd bootloader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  
+  # Set the system's timezone.
   time.timeZone = "America/Chicago";
-  i18n.defaultLocale = "en_US.UTF-8";
 
-  nixpkgs.config.allowUnfree = true;
-
+  # Enable the X server and set up the desktop environment.
   services.xserver.enable = true;
   services.xserver.displayManager.lightdm.enable = true;
   services.xserver.windowManager.i3.enable = true;
+  services.xserver.windowManager.i3.package = pkgs.i3-gaps;
 
-  networking.networkmanager.enable = true;
+  # Enable Home Manager for your user, 'root' in this case.
+  home-manager.users.root = import ./home.nix;
 
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
-
-  fonts.fontconfig.enable = true;
-
-  users.users.cranon = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ];
-  };
-
-  system.stateVersion = "25.05";
+  # Allow unfree packages.
+  nixpkgs.config.allowUnfree = true;
 }

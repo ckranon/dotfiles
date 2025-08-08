@@ -1,0 +1,17 @@
+# i3 config file
+set $mod Mod4
+
+# Start a terminal
+bindsym $mod+t exec alacritty -e tmux new-session -A -s main
+
+# Start Firefox
+bindsym $mod+f exec firefox
+
+# Start dmenu
+bindsym $mod+d exec dmenu_run
+
+# Exit i3
+bindsym $mod+Shift+e exec i3-msg exit
+
+# Wallpaper
+exec --no-startup-id feh --bg-scale /home/cranon/wallpapers/grey_background.png
