@@ -1,17 +1,38 @@
 # i3 config file
 set $mod Mod4
 
+for_window [class="^.*"] border pixel 2
+default_border pixel 2
+
+client.focused		#ffffff #ffffff #ffffff #ffffff
+client.unfocused	#888888 #888888 #888888 #ffffff
+client.focused_inactive #888888 #888888 #888888 #ffffff
+
 # Start a terminal
 bindsym $mod+t exec alacritty -e tmux new-session -A -s main
 
-# Start Firefox
-bindsym $mod+f exec firefox
+# Start Ungoogled-Chromium
+bindsym $mod+u exec chromium
 
 # Start dmenu
 bindsym $mod+d exec dmenu_run
 
+# kill active window
+bindsym $mod+q kill
+
 # Exit i3
 bindsym $mod+Shift+e exec i3-msg exit
 
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+bindsym $mod+c exec "alacritty -e tmux new-session -A -s main & chromium"
+
 # Wallpaper
 exec --no-startup-id feh --bg-scale /home/cranon/wallpapers/grey_background.png
+exec --no-startup-id picom --config /home/cranon/.config/picom/picom.conf
+
+gaps inner 15
+gaps outer 30
